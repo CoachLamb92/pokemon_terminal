@@ -1,10 +1,10 @@
 class Pokemon:
     
-    def __init__(self, name, level=1):
+    def __init__(self, name, level=1, move_pool=[None, None, None, None]):
         self.nickname = name    # Eventually create method to reassign
         self.name = name
         self.level = level
-        self.move_pool = [None, None, None, None]   # Generate these soon
+        self.move_pool = move_pool   # Generate these soon
         self.nature = "" # Create a random nature generator
         self.stats = {'hitpoints': 0,
                       'attack': 0,
@@ -17,6 +17,13 @@ class Pokemon:
         self.non_volatile_status = None # Eventually code in Sleep, Burned, Paralysed, Poisoned and Badly Poisoned
         self.volatile_status = None # Eventually code in Confused, Infatuated, etc
 
-    def use_move(self, move):
+    def use_move(self, move_string):
         pass
-        # implement an function which takes 'move' argument and executes its effects through the 
+        # implement a function which takes 'move_string' argument and executes its effects
+
+    def take_damage(self, damage_int):
+        self.stats['hitpoints'] = max(self.stats['hitpoints']-damage_int, 0)
+
+    def has_fainted(self):
+        return True if self.stats['hitpoints'] == 0 else False
+    

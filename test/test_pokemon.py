@@ -1,4 +1,4 @@
-from src.battle_state.pokemon import Pokemon
+from pokemon import Pokemon
 
 class TestPokemonAttributes:
     def test_pokemon_nickname_attribute_exists(self):
@@ -237,9 +237,101 @@ class TestPokemonMethods:
     def test_use_move_executes_correctly(self):
         # Arrange
         dummy_pokemon = Pokemon('rattata')
+        input_move = ''
         expected = ''
         # Act
-        result = dummy_pokemon.nickname
+        result = dummy_pokemon.use_move(input_move)
         # Assert
         assert expected == result
     """
+    def test_take_damage_exists(self):
+        # Arrange
+        dummy_pokemon = Pokemon('fearow')
+        expected = 'take_damage'
+        # Act
+        result = dir(dummy_pokemon)
+        # Assert
+        assert expected in result
+
+    def test_take_damage_reduces_health_correctly(self):
+        # Arrange
+        dummy_pokemon = Pokemon('ekans')
+        input_damage = 5
+        expected = 4
+        # Act
+        dummy_pokemon.stats['hitpoints'] = 9
+        dummy_pokemon.take_damage(input_damage)
+        result = dummy_pokemon.stats['hitpoints']
+        # Assert
+        assert expected == result
+
+        # Arrange
+        dummy_pokemon = Pokemon('arbok')
+        input_damage = 10
+        expected = 0
+        # Act
+        dummy_pokemon.stats['hitpoints'] = 9
+        dummy_pokemon.take_damage(input_damage)
+        result = dummy_pokemon.stats['hitpoints']
+        # Assert
+        assert expected == result
+
+    def test_has_fainted_exists(self):
+        # Arrange
+        dummy_pokemon = Pokemon('raichu')
+        expected = 'has_fainted'
+        # Act
+        result = dir(dummy_pokemon)
+        # Assert
+        assert expected in result
+
+    def test_has_fainted_returns_correctly(self):
+        # Arrange
+        dummy_pokemon = Pokemon('sandshrew')
+        expected = False
+        # Act
+        dummy_pokemon.stats['hitpoints'] = 9
+        result = dummy_pokemon.has_fainted()
+        # Assert
+        assert expected == result
+
+        # Arrange
+        dummy_pokemon = Pokemon('sandslash')
+        input_damage = 8
+        expected = False
+        # Act
+        dummy_pokemon.stats['hitpoints'] = 9
+        dummy_pokemon.take_damage(input_damage)
+        result = dummy_pokemon.has_fainted()
+        # Assert
+        assert expected == result
+
+        # Arrange
+        dummy_pokemon = Pokemon('nidoran(f)')
+        expected = True
+        # Act
+        result = dummy_pokemon.has_fainted()
+        # Assert
+        assert expected == result
+
+        # Arrange
+        dummy_pokemon = Pokemon('nidorina')
+        input_damage = 9
+        expected = True
+        # Act
+        dummy_pokemon.stats['hitpoints'] = 9
+        dummy_pokemon.take_damage(input_damage)
+        result = dummy_pokemon.has_fainted()
+        # Assert
+        assert expected == result
+
+        # Arrange
+        dummy_pokemon = Pokemon('nidoqueen')
+        input_damage = 20
+        expected = True
+        # Act
+        dummy_pokemon.stats['hitpoints'] = 9
+        dummy_pokemon.take_damage(input_damage)
+        result = dummy_pokemon.has_fainted()
+        # Assert
+        assert expected == result
