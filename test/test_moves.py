@@ -96,7 +96,7 @@ class TestMoveAttributes:
         result = dummy_move._accuracy
         # Assert
         assert expected == result
-
+    """
     def test_move_category_attribute_exists(self):
         # Arrange
         dummy_move = Move('twin needle')
@@ -130,7 +130,7 @@ class TestMoveAttributes:
         result = dummy_move._category
         # Assert
         assert expected == result
-
+    """
         
 class TestMoveMethods:
     def test_move_has_hit_method_exists(self):

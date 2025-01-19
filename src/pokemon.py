@@ -6,7 +6,7 @@ class Pokemon:
         self.level = level
         self.move_pool = move_pool.copy()   # Generate these soon
         self.move_list = []
-        for move in self.move_pool:
+        for move in move_pool:
             if move == None:
                 self.move_list.append("")
             else:
@@ -45,3 +45,20 @@ class Pokemon:
         else:
             pass
             # implement a function to replace a move
+
+    def delete_move(self, move):
+        if move._name in self.move_list:
+            move_list_index = self.move_list.index(move._name)
+            for i in range(move_list_index + 1, 4):
+                self.move_pool[i-1] = self.move_pool[i]
+                self.move_list[i-1] = self.move_list[i]
+            self.move_pool[3] = None
+            self.move_list[3] = ""
+        else:
+            pass
+            # implement a print to say no move to delete
+
+    def alter_pp(self, move):
+        # simply reduces by one for now. eventually add in healing options, spite and pressure
+        if move in self.move_pool and move._powerpoints > 0:
+            move._powerpoints -= 1

@@ -1,6 +1,8 @@
-from src.battle_mechanics.utils import fight_introduction, choose_move, valid_move_choice
+from src.battle_mechanics.utils import fight_introduction, choose_move, valid_move_choice, move_string_to_move
 # from src.battle_mechanics.battle_state import battle_state
-from src.data import squirtle, charmander, pidgey, example_moves
+from src.data import squirtle, charmander, pidgey
+from src.pokemon import Pokemon
+from src.moves import Move
 import io
 import sys
 
@@ -55,26 +57,45 @@ class TestUtils:
         # Assert
         assert expected == result
 
-    def test_valid_move_choice_prints_correctly(self):
+    def test_move_string_to_move_returns_correctly(self):
         # Arrange
-        user_pkmn = squirtle
+        user_pkmn = Pokemon('squirtle')
         chosen_move = 'water gun'
-        expected = 'water gun is out of PP, it cannot be used!'
+        water_gun = Move('water gun', 6, 'water', 100, 'special')
+        user_pkmn.add_move(water_gun)
+        expected = water_gun
         # Act
-        for move in example_moves:
-            if move._name == chosen_move:
-                move._powerpoints = 0
-        # print(user_pkmn.move_pool[0]._powerpoints)
-        # user_pkmn.move_pool[0]._powerpoints = 0
-        # print(user_pkmn.move_pool[0]._powerpoints)
-        # print_statement = io.StringIO()
-        # sys.stdout = print_statement
-        print(move._powerpoints)
-        valid_move_choice(user_pkmn, chosen_move)
-        # sys.stdout = sys.__stdout__
-        # result = print_statement.getvalue()
+        result = move_string_to_move(user_pkmn, chosen_move)
         # Assert
         assert expected == result
 
-    # def test_valid_move_choice_returns_correctly(self):
-    #     assert False
+    def test_valid_move_choice_prints_correctly(self):
+        # Arrange
+        user_pkmn = Pokemon('squirtle')
+        water_gun = Move('water gun', 6, 'water', 100)
+        chosen_move = water_gun
+        expected = 'water gun is out of PP, it cannot be used!\n'
+        # Act
+        user_pkmn.add_move(chosen_move)
+        user_pkmn.alter_pp(chosen_move)
+        print_statement = io.StringIO()
+        sys.stdout = print_statement
+        valid_move_choice(user_pkmn, chosen_move)
+        sys.stdout = sys.__stdout__
+        result = print_statement.getvalue()
+        # Assert
+        assert expected == result
+
+    def test_valid_move_choice_returns_correctly(self):
+        # Arrange
+        user_pkmn = Pokemon('squirtle')
+        water_gun = Move('water gun', 6, 'water', 100)
+        chosen_move = water_gun
+        expected = True
+        # Act
+        result = valid_move_choice(user_pkmn, chosen_move)
+        # Assert
+        assert expected == result
+
+
+

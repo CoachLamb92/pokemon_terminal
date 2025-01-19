@@ -1,4 +1,5 @@
 from src.pokemon import Pokemon
+from src.moves import Move
 from src.data import tackle
 import io
 import sys
@@ -422,4 +423,62 @@ class TestPokemonMethods:
         # Assert
         assert expected == result
 
+    def test_alter_pp_exists(self):
+        # Arrange
+        dummy_pokemon = Pokemon('wigglytuff')
+        expected = 'alter_pp'
+        # Act
+        result = dir(dummy_pokemon)
+        # Assert
+        assert expected in result
 
+    def test_alter_pp_changes_move_pp(self):
+        # Arrange
+        dummy_pokemon = Pokemon('oddish')
+        expected = 0
+        # Act
+        dummy_pokemon.add_move(tackle)
+        dummy_pokemon.alter_pp(tackle)
+        result = dummy_pokemon.move_pool[0]._powerpoints
+        # Assert
+        assert expected == result
+
+    def test_delete_move_exists(self):
+        # Arrange
+        dummy_pokemon = Pokemon('gloom')
+        expected = 'delete_move'
+        # Act
+        result = dir(dummy_pokemon)
+        # Assert
+        assert expected in result
+
+    def test_delete_move_changes_move_pool_and_move_list(self):
+        # Arrange
+        dummy_pokemon = Pokemon('vileplume')
+        input_move = Move('tackle', 6, 'normal', 100, 'physical')
+        expected_pool = [None, None, None, None]
+        expected_list = ["", "", "", ""]
+        # Act
+        dummy_pokemon.add_move(input_move)
+        dummy_pokemon.delete_move(input_move)
+        result_pool = dummy_pokemon.move_pool
+        result_list = dummy_pokemon.move_list
+        # Assert
+        assert expected_list == result_list
+        assert expected_pool == result_pool
+
+    # Arrange
+        dummy_pokemon = Pokemon('zubat')
+        input_move_1 = Move('tackle', 6, 'normal', 100, 'physical')
+        input_move_2 = Move('gust', 5, 'flying', 85, 'special')
+        expected_pool = [input_move_2, None, None, None]
+        expected_list = ['gust', "", "", ""]
+        # Act
+        dummy_pokemon.add_move(input_move_1)
+        dummy_pokemon.add_move(input_move_2)
+        dummy_pokemon.delete_move(input_move_1)
+        result_pool = dummy_pokemon.move_pool
+        result_list = dummy_pokemon.move_list
+        # Assert
+        assert expected_list == result_list
+        assert expected_pool == result_pool
