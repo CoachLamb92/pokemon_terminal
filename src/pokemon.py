@@ -4,7 +4,14 @@ class Pokemon:
         self.nickname = name    # Eventually create method to reassign
         self.name = name
         self.level = level
-        self.move_pool = move_pool   # Generate these soon
+        self.move_pool = move_pool.copy()   # Generate these soon
+        self.move_list = []
+        for move in self.move_pool:
+            if move == None:
+                self.move_list.append("")
+            else:
+                self.move_list.append(move._name)
+
         self.nature = "" # Create a random nature generator
         self.stats = {'hitpoints': 0,
                       'attack': 0,
@@ -27,3 +34,14 @@ class Pokemon:
     def has_fainted(self):
         return True if self.stats['hitpoints'] == 0 else False
     
+    def add_move(self, move):
+        free_spaces = self.move_pool.count(None)
+        if move._name in self.move_list:
+            print("This move is already known!")
+            return
+        if free_spaces > 0:
+            self.move_pool[4-free_spaces] = move
+            self.move_list[4-free_spaces] = move._name
+        else:
+            pass
+            # implement a function to replace a move

@@ -1,4 +1,7 @@
-from pokemon import Pokemon
+from src.pokemon import Pokemon
+from src.data import tackle
+import io
+import sys
 
 class TestPokemonAttributes:
     def test_pokemon_nickname_attribute_exists(self):
@@ -71,17 +74,25 @@ class TestPokemonAttributes:
         result = dir(dummy_pokemon)
         # Assert
         assert expected in result
-    """
-    # Uncomment when move_pool is implemented
+    
     def test_pokemon_move_pool_attribute_returns_move_pool(self):
         # Arrange
-        dummy_pokemon = Pokemon('spearow')
-        expected = ''
+        dummy_pokemon = Pokemon('spearow', move_pool=[tackle, None, None, None])
+        expected = [tackle, None, None, None]
         # Act
         result = dummy_pokemon.move_pool
         # Assert
         assert expected == result
-    """
+
+        # Arrange
+        dummy_pokemon = Pokemon('vulpix')
+        expected = [tackle, None, None, None]
+        # Act
+        dummy_pokemon.add_move(tackle)
+        result = dummy_pokemon.move_pool
+        # Assert
+        assert expected == result
+    
     def test_pokemon_nature_attribute_exists(self):
         # Arrange
         dummy_pokemon = Pokemon('wartortle')
@@ -222,6 +233,32 @@ class TestPokemonAttributes:
         # Assert
         assert expected == result
     """
+    def test_move_list_exists(self):
+        # Arrange
+        dummy_pokemon = Pokemon('nidoking')
+        expected = 'move_list'
+        # Act
+        result = dir(dummy_pokemon)
+        # Assert
+        assert expected in result
+
+    def test_move_list_returns_correctly(self):
+        # Arrange
+        dummy_pokemon = Pokemon('clefairy', move_pool=[tackle, None, None, None])
+        expected = 'tackle'
+        # Act
+        result = dummy_pokemon.move_list[0]
+        # Assert
+        assert expected == result
+
+        # Arrange
+        dummy_pokemon = Pokemon('clefable')
+        expected = 'tackle'
+        # Act
+        dummy_pokemon.add_move(tackle)
+        result = dummy_pokemon.move_list[0]
+        # Assert
+        assert expected == result
 
 class TestPokemonMethods:
     def test_use_move_exists(self):
@@ -335,3 +372,54 @@ class TestPokemonMethods:
         result = dummy_pokemon.has_fainted()
         # Assert
         assert expected == result
+
+    def test_add_move_exists(self):
+        # Arrange
+        dummy_pokemon = Pokemon('nidoran(m)')
+        expected = 'add_move'
+        # Act
+        result = dir(dummy_pokemon)
+        # Assert
+        assert expected in result
+
+    def test_add_move_returns_correctly_once(self):
+        # Arrange
+        dummy_pokemon = Pokemon('nidorino')
+        expected = 'tackle'
+        # Act
+        dummy_pokemon.add_move(tackle)
+        result_1 = dummy_pokemon.move_pool[0]._name
+        result_2 = dummy_pokemon.move_list[0]
+        # Assert
+        assert expected == result_1
+        assert expected == result_2
+
+    def test_add_move_returns_correctly_twice(self):
+        # Arrange
+        dummy_pokemon = Pokemon('ninetales')
+        expected_1 = ['tackle', "", "", ""]
+        expected_2 = [tackle, None, None, None]
+        # Act
+        dummy_pokemon.add_move(tackle)
+        dummy_pokemon.add_move(tackle)
+        result_1 = dummy_pokemon.move_list
+        result_2 = dummy_pokemon.move_pool
+        # Assert
+        assert expected_1 == result_1
+        assert expected_2 == result_2
+
+    def test_add_move_prints_correctly(self):
+        # Arrange
+        dummy_pokemon = Pokemon('jigglypuff')
+        expected = "This move is already known!\n"
+        # Act
+        dummy_pokemon.add_move(tackle)
+        print_statement = io.StringIO()
+        sys.stdout = print_statement
+        dummy_pokemon.add_move(tackle)
+        sys.stdout = sys.__stdout__
+        result = print_statement.getvalue()
+        # Assert
+        assert expected == result
+
+
